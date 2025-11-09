@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { MapPin, Calendar } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface HeritageCardProps {
   title: string;
@@ -11,6 +12,17 @@ interface HeritageCardProps {
   index: number;
 }
 
+const getTourRoute = (title: string): string => {
+  const routes: Record<string, string> = {
+    "Taj Mahal": "/tour/taj-mahal",
+    "Hampi": "/tour/hampi",
+    "Konark Sun Temple": "/tour/konark",
+    "Qutub Minar": "/tour/qutub-minar",
+    "Ajanta Caves": "/tour/ajanta",
+  };
+  return routes[title] || "/";
+};
+
 export const HeritageCard = ({
   title,
   location,
@@ -19,6 +31,12 @@ export const HeritageCard = ({
   image,
   index,
 }: HeritageCardProps) => {
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+    navigate(getTourRoute(title));
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -29,6 +47,7 @@ export const HeritageCard = ({
       <motion.div
         whileHover={{ scale: 1.02, y: -5 }}
         transition={{ duration: 0.3 }}
+        onClick={handleClick}
       >
         <Card className="glass-card overflow-hidden group cursor-pointer h-full">
           {/* Image Container */}

@@ -1,8 +1,19 @@
-# Welcome to your Lovable project
+# AR Heritage Odyssey 2.0
+
+An immersive 3D and AR tour platform showcasing India's magnificent heritage sites with interactive animations, voice narration, and 360° exploration.
 
 ## Project info
 
 **URL**: https://lovable.dev/projects/6024037d-e42c-4b6d-ac43-804e68730b34
+
+## 🏛️ Features
+
+- **Interactive 3D Models** - Explore Taj Mahal, Hampi, Konark, Qutub Minar, and Ajanta Caves
+- **360° AR Tours** - Full immersive experiences with orbit controls
+- **GSAP Scroll Animations** - Cinematic parallax and scroll-triggered effects
+- **Voice Narration** - Audio-guided tours with historical context
+- **Interactive Hotspots** - Learn about specific architectural features
+- **Dark Futuristic Theme** - Glassmorphism, glowing effects, and gradients
 
 ## How can I edit this code?
 
@@ -54,11 +65,13 @@ npm run dev
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- React + TypeScript + Vite
+- Three.js + React Three Fiber + Drei (3D graphics)
+- GSAP with ScrollTrigger (scroll animations)
+- Framer Motion (UI animations)
+- Howler.js (audio management)
+- Shadcn-ui + Radix UI (components)
+- Tailwind CSS (styling)
 
 ## How can I deploy this project?
 

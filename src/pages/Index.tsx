@@ -2,7 +2,13 @@ import { HeroSection } from "@/components/HeroSection";
 import { HeritageCard } from "@/components/HeritageCard";
 import { TajMahal3D } from "@/components/TajMahal3D";
 import { HeritageTimeline } from "@/components/HeritageTimeline";
+import { Navigation } from "@/components/Navigation";
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const heritageSites = [
   {
@@ -48,14 +54,64 @@ const heritageSites = [
 ];
 
 const Index = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    const cards = sectionRef.current.querySelectorAll(".heritage-card");
+    
+    cards.forEach((card, index) => {
+      gsap.fromTo(
+        card,
+        { 
+          opacity: 0, 
+          y: 100,
+          scale: 0.8,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          delay: index * 0.1,
+          scrollTrigger: {
+            trigger: card,
+            start: "top 80%",
+            end: "top 50%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    });
+
+    // Parallax effect for section background
+    gsap.to(".heritage-section-bg", {
+      y: -100,
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1,
+      },
+    });
+  }, []);
+
   return (
     <main className="relative bg-background text-foreground overflow-x-hidden">
+      <Navigation />
       {/* Hero Section */}
       <HeroSection />
 
       {/* Heritage Sites Section */}
-      <section className="relative py-32 px-6">
-        <div className="max-w-7xl mx-auto">
+      <section ref={sectionRef} className="relative py-32 px-6">
+        {/* Background gradient effect */}
+        <div className="heritage-section-bg absolute inset-0 opacity-30 pointer-events-none">
+          <div className="absolute top-20 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl" />
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -76,7 +132,9 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {heritageSites.map((site, index) => (
-              <HeritageCard key={index} {...site} index={index} />
+              <div key={index} className="heritage-card">
+                <HeritageCard {...site} index={index} />
+              </div>
             ))}
           </div>
         </div>
@@ -86,7 +144,9 @@ const Index = () => {
       <TajMahal3D />
 
       {/* Timeline Section */}
-      <HeritageTimeline />
+      <div id="timeline">
+        <HeritageTimeline />
+      </div>
 
       {/* AR CTA Section */}
       <section className="relative py-32 px-6">

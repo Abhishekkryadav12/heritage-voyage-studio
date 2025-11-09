@@ -1,16 +1,62 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const HeroSection = () => {
+  const heroRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!heroRef.current || !contentRef.current) return;
+
+    // Parallax effect on scroll
+    gsap.to(contentRef.current, {
+      y: 100,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1,
+      },
+    });
+
+    // Glow effect animation
+    gsap.to(".hero-glow", {
+      scale: 1.3,
+      opacity: 0.5,
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1,
+      },
+    });
+  }, []);
+
+  const scrollToContent = () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section 
+      ref={heroRef}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+    >
       {/* Ambient Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-card" />
       
       {/* Radial Glow Effect */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-30"
+        className="hero-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-30"
         style={{
           background: "radial-gradient(circle, hsl(38 92% 50% / 0.3), transparent 70%)",
         }}
@@ -26,7 +72,7 @@ export const HeroSection = () => {
       />
 
       {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-6xl">
+      <div ref={contentRef} className="relative z-10 text-center px-6 max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -63,6 +109,7 @@ export const HeroSection = () => {
             <Button
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 glow-gold"
+              onClick={scrollToContent}
             >
               Begin Journey
             </Button>
@@ -70,8 +117,9 @@ export const HeroSection = () => {
               size="lg"
               variant="outline"
               className="glass-card text-lg px-8 py-6 border-primary/50 hover:bg-primary/10"
+              onClick={scrollToContent}
             >
-              Enter AR Mode
+              Explore Sites
             </Button>
           </motion.div>
         </motion.div>
@@ -104,9 +152,10 @@ export const HeroSection = () => {
 
       {/* Scroll Indicator */}
       <motion.div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 cursor-pointer"
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
+        onClick={scrollToContent}
       >
         <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex items-start justify-center p-2">
           <motion.div
